@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Shot List">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <title>Real Estate Shot List</title>
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --accent: #111827;
+      --success: #15803d;
+      --danger: #b91c1c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      padding-bottom: calc(92px + env(safe-area-inset-bottom));
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: calc(14px + env(safe-area-inset-top)) 16px 14px;
+      background: rgba(17,24,39,.96);
+      color: white;
+      backdrop-filter: blur(12px);
+    }
+    header h1 { margin: 0; font-size: 21px; }
+    header p { margin: 4px 0 0; font-size: 13px; opacity: .78; }
+    main { max-width: 760px; margin: 0 auto; padding: 14px; }
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.07);
+    }
+    label.small, .small { font-size: 12px; color: var(--muted); font-weight: 600; }
+    input, select, textarea, button {
+      font: inherit;
+    }
+    input[type="text"], select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 12px;
+      margin-top: 6px;
+      background: white;
+      color: var(--text);
+    }
+    textarea { min-height: 76px; resize: vertical; }
+    .grid { display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
+    .progress-wrap { margin-top: 12px; }
+    .progress-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+    .progress { height: 10px; background: #e5e7eb; border-radius: 999px; overflow: hidden; }
+    .progress > div { height: 100%; width: 0; background: var(--success); transition: width .2s; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .section-title h2 { font-size: 18px; margin: 0; }
+    .shot {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 2px;
+      border-top: 1px solid var(--line);
+      min-height: 48px;
+    }
+    .shot:first-of-type { border-top: none; }
+    .shot input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      accent-color: var(--success);
+      flex: 0 0 auto;
+    }
+    .shot span { flex: 1; font-size: 16px; }
+    .shot.done span { color: var(--muted); text-decoration: line-through; }
+    .icon-btn {
+      border: 0;
+      background: transparent;
+      color: var(--danger);
+      font-size: 18px;
+      padding: 8px;
+    }
+    .row { display: flex; gap: 8px; align-items: center; }
+    .row input { margin: 0; }
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn.primary { background: var(--accent); color: white; }
+    .btn.secondary { background: #e5e7eb; color: var(--text); }
+    .btn.danger { background: #fee2e2; color: var(--danger); }
+    .btn.full { width: 100%; }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .bottom {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+      background: rgba(255,255,255,.94);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+      z-index: 20;
+    }
+    .bottom-inner { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .hidden { display: none; }
+    @media (max-width: 520px) {
+      .grid, .actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Real Estate Shot List</h1>
+  <p>MLS + editorial checklist</p>
+</header>
+
+<main>
+  <section class="card">
+    <label class="small" for="address">Property address</label>
+    <input id="address" type="text" placeholder="162 Oakmount Road, Toronto">
+
+    <div class="grid" style="margin-top:10px">
+      <div>
+        <label class="small" for="template">Template</label>
+        <select id="template">
+          <option value="exterior">Exterior — MLS + Editorial</option>
+          <option value="detached">Full Detached Home</option>
+          <option value="condo">Condo</option>
+          <option value="custom">Custom / Blank</option>
+        </select>
+      </div>
+      <div>
+        <label class="small" for="shootTime">Shoot time</label>
+        <input id="shootTime" type="text" placeholder="12:00 PM">
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-row"><span>Progress</span><strong id="progressText">0 / 0</strong></div>
+      <div class="progress"><div id="progressBar"></div></div>
+    </div>
+  </section>
+
+  <div id="sections"></div>
+
+  <section class="card">
+    <div class="section-title"><h2>Add a shot</h2></div>
+    <div class="row">
+      <input id="newShot" type="text" placeholder="Example: Detail of front door">
+      <button id="addShot" class="btn primary">Add</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <label class="small" for="notes">Shoot notes</label>
+    <textarea id="notes" placeholder="Lighting, access, agent requests, retakes..."></textarea>
+  </section>
+
+  <section class="card">
+    <div class="actions">
+      <button id="resetChecks" class="btn secondary">Reset checkmarks</button>
+      <button id="clearAll" class="btn danger">Clear shoot</button>
+    </div>
+  </section>
+</main>
+
+<div class="bottom">
+  <div class="bottom-inner">
+    <button id="copySummary" class="btn secondary">Copy summary</button>
+    <button id="newShoot" class="btn primary">Start new shoot</button>
+  </div>
+</div>
+
+<script>
+const templates = {
+  exterior: [
+    ["Front of House", ["Straight-on hero", "Left 45° angle", "Right 45° angle", "Wide establishing shot", "Portrait hero", "Landscape hero", "Low-angle curb appeal"]],
+    ["Front Details", ["Front door", "House number", "Porch", "Exterior light fixtures", "Brick or siding detail", "Windows", "Architectural trim"]],
+    ["Front Landscaping", ["Walkway", "Garden beds", "Mature trees", "Lawn", "Framed through plants"]],
+    ["Streetscape", ["Looking north", "Looking south", "Tree-lined street", "Sidewalk", "Neighbourhood context", "Nearby park or green space"]],
+    ["Side Yard", ["Side walkway", "Side entrance", "Gate", "Side landscaping"]],
+    ["Backyard", ["Straight rear elevation", "Left rear angle", "Right rear angle", "Full backyard", "Deck or patio", "Rear entrance", "Garden", "Outdoor entertaining area"]],
+    ["Editorial", ["Symmetrical front composition", "Walkway leading to front door", "Close-up entry detail", "Backyard lifestyle image", "Mature trees framing home", "Street perspective", "Feature-sheet hero"]],
+    ["Before Leaving", ["Cars cleared from key frames", "Bins hidden", "Hose stored", "Doors and gates closed", "Verticals checked", "Final hero captured"]]
+  ],
+  detached: [
+    ["Exterior", ["Front hero", "Front left angle", "Front right angle", "Rear elevation", "Backyard", "Deck or patio", "Side entrance"]],
+    ["Main Floor", ["Foyer", "Living room wide", "Living room alternate", "Dining room", "Kitchen wide", "Kitchen details", "Powder room"]],
+    ["Upper Floor", ["Primary bedroom", "Primary alternate", "Ensuite", "Bedroom 2", "Bedroom 3", "Main bathroom", "Hallway"]],
+    ["Lower Level", ["Basement wide", "Rec room", "Bedroom or office", "Bathroom", "Laundry"]],
+    ["Details", ["Fireplace", "Built-ins", "Feature lighting", "Architectural details", "View or lifestyle shot"]],
+    ["Before Leaving", ["All rooms captured", "Lights consistent", "Blinds aligned", "Toilet lids down", "Final hero captured"]]
+  ],
+  condo: [
+    ["Suite", ["Entry", "Living room wide", "Living room alternate", "Dining area", "Kitchen wide", "Kitchen detail", "Primary bedroom", "Second bedroom or den", "Bathroom", "Balcony", "View"]],
+    ["Amenities", ["Lobby", "Gym", "Party room", "Pool", "Terrace", "Parking", "Locker"]],
+    ["Editorial", ["Lifestyle living shot", "Kitchen detail", "Balcony lifestyle", "View hero"]],
+    ["Before Leaving", ["Lights consistent", "Blinds aligned", "Toilet lids down", "Final hero captured"]]
+  ],
+  custom: [["Shots", []]]
+};
+
+let state = {
+  address: "",
+  shootTime: "",
+  template: "exterior",
+  notes: "",
+  sections: []
+};
+
+const $ = id => document.getElementById(id);
+
+function cloneTemplate(name) {
+  return templates[name].map(([title, shots]) => ({
+    title,
+    shots: shots.map(text => ({ text, done: false }))
+  }));
+}
+
+function load() {
+  const saved = localStorage.getItem("shotListState");
+  if (saved) {
+    try { state = JSON.parse(saved); } catch {}
+  }
+  if (!state.sections || !state.sections.length) state.sections = cloneTemplate(state.template || "exterior");
+  render();
+}
+
+function save() {
+  localStorage.setItem("shotListState", JSON.stringify(state));
+}
+
+function render() {
+  $("address").value = state.address || "";
+  $("shootTime").value = state.shootTime || "";
+  $("template").value = state.template || "exterior";
+  $("notes").value = state.notes || "";
+
+  const wrap = $("sections");
+  wrap.innerHTML = "";
+
+  state.sections.forEach((section, sIndex) => {
+    const card = document.createElement("section");
+    card.className = "card";
+    const title = document.createElement("div");
+    title.className = "section-title";
+    title.innerHTML = `<h2>${escapeHtml(section.title)}</h2><span class="small">${section.shots.filter(s => s.done).length}/${section.shots.length}</span>`;
+    card.appendChild(title);
+
+    section.shots.forEach((shot, i) => {
+      const row = document.createElement("label");
+      row.className = "shot" + (shot.done ? " done" : "");
+      row.innerHTML = `
+        <input type="checkbox" ${shot.done ? "checked" : ""}>
+        <span>${escapeHtml(shot.text)}</span>
+        <button type="button" class="icon-btn" aria-label="Delete shot">×</button>`;
+      row.querySelector("input").addEventListener("change", e => {
+        state.sections[sIndex].shots[i].done = e.target.checked;
+        save(); render();
+      });
+      row.querySelector("button").addEventListener("click", e => {
+        e.preventDefault();
+        state.sections[sIndex].shots.splice(i, 1);
+        save(); render();
+      });
+      card.appendChild(row);
+    });
+    wrap.appendChild(card);
+  });
+
+  const shots = state.sections.flatMap(s => s.shots);
+  const done = shots.filter(s => s.done).length;
+  $("progressText").textContent = `${done} / ${shots.length}`;
+  $("progressBar").style.width = shots.length ? `${(done / shots.length) * 100}%` : "0%";
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+$("address").addEventListener("input", e => { state.address = e.target.value; save(); });
+$("shootTime").addEventListener("input", e => { state.shootTime = e.target.value; save(); });
+$("notes").addEventListener("input", e => { state.notes = e.target.value; save(); });
+
+$("template").addEventListener("change", e => {
+  state.template = e.target.value;
+  state.sections = cloneTemplate(state.template);
+  save(); render();
+});
+
+$("addShot").addEventListener("click", () => {
+  const text = $("newShot").value.trim();
+  if (!text) return;
+  if (!state.sections.length) state.sections = [{ title: "Shots", shots: [] }];
+  state.sections[state.sections.length - 1].shots.push({ text, done: false });
+  $("newShot").value = "";
+  save(); render();
+});
+
+$("newShot").addEventListener("keydown", e => {
+  if (e.key === "Enter") $("addShot").click();
+});
+
+$("resetChecks").addEventListener("click", () => {
+  state.sections.forEach(s => s.shots.forEach(sh => sh.done = false));
+  save(); render();
+});
+
+$("clearAll").addEventListener("click", () => {
+  state = { address: "", shootTime: "", template: "custom", notes: "", sections: cloneTemplate("custom") };
+  save(); render();
+});
+
+$("newShoot").addEventListener("click", () => {
+  state.address = "";
+  state.shootTime = "";
+  state.notes = "";
+  state.sections = cloneTemplate(state.template);
+  save(); render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+$("copySummary").addEventListener("click", async () => {
+  const lines = [
+    state.address || "Untitled shoot",
+    state.shootTime ? `Shoot time: ${state.shootTime}` : "",
+    ""
+  ];
+  state.sections.forEach(section => {
+    lines.push(section.title);
+    section.shots.forEach(s => lines.push(`${s.done ? "✓" : "☐"} ${s.text}`));
+    lines.push("");
+  });
+  if (state.notes) lines.push("Notes:", state.notes);
+  const text = lines.filter((v, i, arr) => !(v === "" && arr[i-1] === "")).join("\n");
+  try {
+    await navigator.clipboard.writeText(text);
+    $("copySummary").textContent = "Copied";
+    setTimeout(() => $("copySummary").textContent = "Copy summary", 1200);
+  } catch {
+    alert(text);
+  }
+});
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js"));
+}
+load();
+</script>
+</body>
+</html>
