@@ -23,3 +23,6 @@ IPHONE INSTALL
 4. Open the new Shot List icon.
 
 The app stores the current checklist locally on the device.
+
+UPDATE
+- Added dedicated Interior - MLS + Editorial checklist template.

@@ -144,6 +144,7 @@
         <label class="small" for="template">Template</label>
         <select id="template">
           <option value="exterior">Exterior — MLS + Editorial</option>
+          <option value="interior">Interior — MLS + Editorial</option>
           <option value="detached">Full Detached Home</option>
           <option value="condo">Condo</option>
           <option value="custom">Custom / Blank</option>
@@ -202,6 +203,18 @@ const templates = {
     ["Backyard", ["Straight rear elevation", "Left rear angle", "Right rear angle", "Full backyard", "Deck or patio", "Rear entrance", "Garden", "Outdoor entertaining area"]],
     ["Editorial", ["Symmetrical front composition", "Walkway leading to front door", "Close-up entry detail", "Backyard lifestyle image", "Mature trees framing home", "Street perspective", "Feature-sheet hero"]],
     ["Before Leaving", ["Cars cleared from key frames", "Bins hidden", "Hose stored", "Doors and gates closed", "Verticals checked", "Final hero captured"]]
+  ],
+  interior: [
+    ["Entry & Flow", ["Front door from inside", "Foyer wide", "Foyer toward main living area", "Hallway or circulation view", "Staircase wide", "Architectural transition shot"]],
+    ["Living Room", ["Main wide from entry corner", "Reverse wide", "Best window-facing angle", "Fireplace or focal wall", "Connection to dining room", "Editorial lifestyle composition"]],
+    ["Dining Room", ["Main wide", "Reverse angle", "Connection to kitchen", "Table setting detail", "Light fixture detail", "Editorial dining composition"]],
+    ["Kitchen", ["Main wide", "Reverse wide", "Island or peninsula angle", "Cabinet and counter elevation", "Appliance wall", "Sink and window view", "Kitchen-to-dining flow", "Countertop or fixture detail", "Editorial kitchen hero"]],
+    ["Primary Bedroom", ["Main corner wide", "Reverse wide", "Bed-facing composition", "Window or view", "Closet or dressing area", "Editorial bedside detail"]],
+    ["Additional Bedrooms", ["Bedroom 2 main wide", "Bedroom 2 reverse", "Bedroom 3 main wide", "Bedroom 3 reverse", "Office or den wide", "Closets only when notable"]],
+    ["Bathrooms", ["Powder room", "Main bathroom wide", "Vanity angle", "Tub or shower angle", "Ensuite wide", "Ensuite vanity", "Fixture or tile detail"]],
+    ["Lower Level", ["Basement main wide", "Reverse wide", "Recreation area", "Bedroom or office", "Bathroom", "Laundry room", "Storage or utility only when marketable"]],
+    ["Special Features", ["Fireplace detail", "Built-ins", "Feature lighting", "Original architectural detail", "Renovation detail", "View from window", "Indoor-outdoor connection", "Best vertical editorial image"]],
+    ["Quality Control", ["All rooms captured", "At least two angles for main rooms", "Lights consistent", "Blinds and curtains aligned", "Toilet lids down", "Mirrors checked for reflection", "Cords and clutter removed", "Verticals checked", "Final interior hero captured"]]
   ],
   detached: [
     ["Exterior", ["Front hero", "Front left angle", "Front right angle", "Rear elevation", "Backyard", "Deck or patio", "Side entrance"]],
